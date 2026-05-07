@@ -4,128 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEO OS - Pembangun Perisian Profesional</title>
+    
     <!-- Muat pustaka Marked.js dari CDN untuk render Markdown ke HTML -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        /* CSS Lengkap & Kemas */
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            background-color: #f0f2f5;
-            color: #1c1e21;
-        }
-
-        .header-bar {
-            background-color: #0056b3;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 950px;
-            margin: 30px auto;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        h1#journal-title {
-            color: #ffffff;
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        /* Gaya Kandungan Markdown */
-        #markdown-content h1 {
-            color: #0056b3;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        #markdown-content h2 {
-            color: #007bff;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 35px;
-        }
-
-        #markdown-content h3 {
-            color: #17a2b8;
-            margin-top: 25px;
-        }
-
-        #markdown-content pre {
-            background-color: #282c34;
-            color: #abb2bf;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.45;
-        }
-
-        #markdown-content code {
-            font-family: 'Consolas', monospace;
-            background-color: #f1f3f5;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #d63384;
-        }
-
-        #markdown-content blockquote {
-            border-left: 5px solid #0056b3;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            color: #495057;
-            font-style: italic;
-            margin: 20px 0;
-        }
-
-        #markdown-content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        #markdown-content table th, #markdown-content table td {
-            border: 1px solid #dee2e6;
-            padding: 12px;
-            text-align: left;
-        }
-
-        #markdown-content table th {
-            background-color: #f8f9fa;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: #65676b;
-            font-size: 0.85rem;
-        }
-
-        /* Navigasi Ringkas */
-        .nav-quick {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .nav-quick a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #0056b3;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .nav-quick a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    
+    <!-- Pautan ke fail CSS Luaran -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -134,7 +18,7 @@
     </div>
 
     <div class="container">
-        <!-- Tambahan Navigasi untuk memudahkan anda berpindah fail -->
+        <!-- Navigasi Ringkas untuk berpindah fail -->
         <div class="nav-quick">
             <a href="#" onclick="loadMarkdownFile('NEO_OS.md')">Visi</a> | 
             <a href="#" onclick="loadMarkdownFile('isi_kandungan.md')">Isi Kandungan</a> | 
@@ -151,62 +35,7 @@
         NEO OS Project &copy; 2026 | Dibangunkan dengan Falsafah Zero-Ralat
     </div>
 
-    <script>
-        /**
-         * Fungsi Utama: Memuatkan fail Markdown dan menukarkannya ke HTML
-         */
-        async function loadMarkdownFile(filename) {
-            const contentDiv = document.getElementById('markdown-content');
-            const titleEl = document.getElementById('journal-title');
-
-            // Skrol ke atas setiap kali tukar fail
-            window.scrollTo(0, 0);
-
-            try {
-                // Fetch sumber fail .md (tambah cache breaker untuk elak data lama)
-                const response = await fetch(filename + '?v=' + new Date().getTime());
-                
-                if (!response.ok) {
-                    throw new Error(`Kernel Error: Gagal memuatkan fail [${filename}]`);
-                }
-
-                const markdownText = await response.text();
-                contentDiv.innerHTML = marked.parse(markdownText);
-
-                // Update UI title
-                if (filename.includes('daily_task')) {
-                    titleEl.innerText = `NEO OS Log: ${filename}`;
-                } else if (filename === 'NEO_OS.md') {
-                    titleEl.innerText = "NEO OS: Strategic Planning";
-                } else {
-                    titleEl.innerText = filename.replace('.md', '').toUpperCase();
-                }
-
-                document.title = titleEl.innerText;
-
-            } catch (error) {
-                console.error("OS System Error:", error);
-                contentDiv.innerHTML = `
-                    <div style="background-color: #fff0f0; border: 1px solid #ffcccb; padding: 20px; border-radius: 8px;">
-                        <h3 style="color: #d9534f; margin-top: 0;">🛑 Ralat Pemuatan Sistem</h3>
-                        <p>Fail tidak dijumpai: <strong>${filename}</strong></p>
-                        <p>Penyelesaian:</p>
-                        <ul>
-                            <li>Pastikan nama fail dalam GitHub adalah 100% tepat (sensitif huruf besar/kecil).</li>
-                            <li>Pastikan anda telah melakukan 'Commit' dan 'Push' fail tersebut.</li>
-                        </ul>
-                    </div>
-                `;
-            }
-        }
-
-        /**
-         * KONFIGURASI FAIL PERMULAAN
-         * Saya ubah kepada 'NEO_OS.md' mengikut struktur fail terkini anda.
-         */
-        const INITIAL_FILE = 'NEO_OS.md'; 
-        
-        loadMarkdownFile(INITIAL_FILE);
-    </script>
+    <!-- Pautan ke fail JavaScript Luaran -->
+    <script src="script.js"></script>
 </body>
 </html>
