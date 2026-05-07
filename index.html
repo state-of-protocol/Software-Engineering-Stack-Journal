@@ -1,41 +1,83 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="ms" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEO OS - Pembangun Perisian Profesional</title>
+    <title>NEO OS | Engineering Stack Journal</title>
     
-    <!-- Muat pustaka Marked.js dari CDN untuk render Markdown ke HTML -->
+    <!-- Library: Marked.js untuk render Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Library: Lucide Icons untuk ikon profesional -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Pautan ke fail CSS Luaran -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="header-bar">
-        <h1 id="journal-title">NEO OS System Archive</h1>
-    </div>
-
-    <div class="container">
-        <!-- Navigasi Ringkas untuk berpindah fail -->
-        <div class="nav-quick">
-            <a href="#" onclick="loadMarkdownFile('NEO_OS.md')">Visi</a> | 
-            <a href="#" onclick="loadMarkdownFile('isi_kandungan.md')">Isi Kandungan</a> | 
-            <a href="#" onclick="loadMarkdownFile('daily_task_day1.md')">Log Day 1</a> |
-            <a href="#" onclick="loadMarkdownFile('architecture.md')">Seni Bina</a>
+    <!-- Side Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">NEO<span>OS</span></div>
+            <button id="theme-toggle" class="theme-btn">
+                <i data-lucide="moon" id="theme-icon"></i>
+            </button>
         </div>
 
-        <div id="markdown-content">
-            <p>Sila tunggu sebentar, sistem sedang memuatkan data kernel...</p>
+        <div class="nav-group">
+            <p class="nav-label">Core Documents</p>
+            <a href="#" class="nav-item active" onclick="loadMarkdownFile('NEO_OS.md')">
+                <i data-lucide="book-open"></i> Visi Strategik
+            </a>
+            <a href="#" class="nav-item" onclick="loadMarkdownFile('isi_kandungan.md')">
+                <i data-lucide="list"></i> Isi Kandungan
+            </a>
+            <a href="#" class="nav-item" onclick="loadMarkdownFile('manifesto_awal.md')">
+                <i data-lucide="file-text"></i> Manifesto
+            </a>
+            <a href="#" class="nav-item" onclick="loadMarkdownFile('architecture.md')">
+                <i data-lucide="cpu"></i> Seni Bina
+            </a>
         </div>
-    </div>
 
-    <div class="footer">
-        NEO OS Project &copy; 2026 | Dibangunkan dengan Falsafah Zero-Ralat
-    </div>
+        <div class="nav-group">
+            <p class="nav-label">Daily Logs</p>
+            <div class="search-box">
+                <input type="text" id="day-search" placeholder="Cari Hari (cth: 1)..." oninput="filterDays()">
+            </div>
+            <div id="days-list" class="days-list">
+                <!-- Fail daily_task_dayN.md akan dijana secara automatik di sini -->
+            </div>
+        </div>
 
-    <!-- Pautan ke fail JavaScript Luaran -->
+        <div class="sidebar-footer">
+            <p>Version 1.0.0</p>
+            <p>Zero-Error Philosophy</p>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="breadcrumb">
+                <span id="breadcrumb-path">NEO OS / Home</span>
+            </div>
+            <div class="user-profile">
+                <span id="current-date"></span>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            <div id="markdown-content" class="markdown-body">
+                <!-- Content loads here -->
+                <div class="loader">Memuatkan Sistem...</div>
+            </div>
+        </div>
+    </main>
+
     <script src="script.js"></script>
+    <script>
+        // Inisialisasi ikon Lucide
+        lucide.createIcons();
+    </script>
 </body>
 </html>
