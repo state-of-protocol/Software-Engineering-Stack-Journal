@@ -1,6 +1,6 @@
 # ✨ Manifesto Awal NEO OS: Sebuah Deklarasi Kebebasan Digital
 
-*Oleh: [Nama Anda]*
+*Oleh: 0xAimanMohd*
 *Tarikh Cipta: 07 Mei 2026*
 
 ---
