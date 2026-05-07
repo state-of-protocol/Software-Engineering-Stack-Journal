@@ -1,69 +1,69 @@
 /**
  * NEO OS - Engineering Journal Engine
- * Version: 3.0.0 (Zero-Error Hardened Edition)
+ * Version: 4.0.0 (Ekosistem 10 Tunggak)
  * 
  * Penambahbaikan Utama:
- * - Halaman permulaan menggunakan 'isi_kandungan.md' (dashboard jurnal).
- * - Pengecaman hari belum tersedia secara automatik.
- * - Caching respons untuk navigasi sepantas kilat.
- * - Mengingat kembali fail terakhir dibuka selepas refresh.
+ * - Halaman utama (welcome screen) dipaparkan secara lalai.
+ * - Navigasi 10 Tunggak + Log Harian + Laporan Debug.
+ * - Mod gelap/cerah disimpan secara kekal.
+ * - Penunjuk kemajuan membaca & butang kembali ke atas.
+ * - Sidebar responsif untuk peranti mudah alih.
+ * - Caching respons untuk prestasi pantas.
+ * - Pulihkan fail terakhir dibuka selepas refresh.
  */
 
+// =================== KONFIGURASI ===================
 const CONFIG = {
-    initialFile: 'isi_kandungan.md',      // <-- Dashboard jurnal
+    initialFile: null,                    // null = papar welcome screen
     themeKey: 'neo_os_theme',
     lastFileKey: 'neo_last_opened_file',
-    totalPlannedDays: 30,                 // Boleh dinaikkan mengikut keperluan
+    totalPlannedDays: 30,                 // Bilangan hari pembangunan yang dirancang
+    totalDebugWeeks: 30,                  // Bilangan minggu laporan debug
 };
 
-// Simpan cache parsed HTML (prestasi)
+// Cache untuk kandungan Markdown yang telah diproses
 const contentCache = new Map();
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (!document.getElementById('markdown-content')) {
-        console.error("CRITICAL ERROR: Element #markdown-content not found in HTML!");
-        return;
-    }
-
-    initTheme();
-    initDaysList();
-    updateClock();
-    setInterval(updateClock, 1000);
-
-    // Pulihkan fail terakhir yang dibuka, jika ada
-    const lastFile = sessionStorage.getItem(CONFIG.lastFileKey);
-    loadMarkdownFile(lastFile || CONFIG.initialFile);
-});
+// =================== FUNGSI UTAMA ===================
 
 /**
- * Muatkan dan papar fail Markdown dengan caching & error mesra.
- * @param {string} filename - Nama fail .md
+ * Muatkan fail Markdown dan paparkannya.
+ * @param {string} filePath - Laluan fail .md
+ * @param {HTMLElement} [element] - Elemen navigasi yang diklik (pilihan)
  */
-async function loadMarkdownFile(filename) {
+async function loadMarkdownFile(filePath, element) {
     const contentDiv = document.getElementById('markdown-content');
     const pathEl = document.getElementById('breadcrumb-path');
+    const titleEl = document.getElementById('journal-title');
 
     if (!contentDiv) return;
 
-    // Gunakan cache jika ada
-    if (contentCache.has(filename)) {
-        renderContent(filename, contentCache.get(filename));
+    // Serlahkan item navigasi yang aktif
+    setActiveNav(element);
+
+    // Sembunyikan welcome screen jika ada
+    const welcomeScreen = document.querySelector('.welcome-screen');
+    if (welcomeScreen) welcomeScreen.style.display = 'none';
+
+    // Gunakan cache jika tersedia
+    if (contentCache.has(filePath)) {
+        renderContent(filePath, contentCache.get(filePath));
         return;
     }
 
+    // Tunjuk kesan loading
     contentDiv.style.opacity = '0.5';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
-        const response = await fetch(`${filename}?v=${Date.now()}`);
-        
+        const response = await fetch(`${filePath}?v=${Date.now()}`);
+
         if (!response.ok) {
-            // Jika fail hari ke-N tetapi status 404, ia BELUM dicipta
-            const isDayFile = /^daily_task_day\d+\.md$/.test(filename);
+            const isDayFile = /^daily_task_day\d+\.md$/.test(filePath);
             if (response.status === 404 && isDayFile) {
                 throw new Error('🚧 Hari Pembangunan Ini Belum Tersedia');
             }
-            throw new Error(`Fail tidak dijumpai: ${filename}`);
+            throw new Error(`Fail tidak dijumpai: ${filePath}`);
         }
 
         const text = await response.text();
@@ -71,32 +71,25 @@ async function loadMarkdownFile(filename) {
         try {
             html = marked.parse(text);
         } catch (parseErr) {
-            console.error("Markdown Parse Error:", parseErr);
+            console.error("Ralat memproses Markdown:", parseErr);
             html = `<div class="error-box">⚠️ Ralat memproses fail Markdown. Sila semak sintaks.</div>`;
         }
 
-        // Simpan dalam cache & papar
-        contentCache.set(filename, html);
-        renderContent(filename, html);
+        // Simpan dalam cache
+        contentCache.set(filePath, html);
+        renderContent(filePath, html);
 
         // Simpan jejak fail terakhir dibuka
-        sessionStorage.setItem(CONFIG.lastFileKey, filename);
-
-        // Highlight nav-item yang aktif
-        document.querySelectorAll('.nav-item, .day-link').forEach(el => {
-            el.classList.remove('active');
-        });
-        const activeLink = document.querySelector(`[onclick*="${filename}"]`);
-        if (activeLink) activeLink.classList.add('active');
+        sessionStorage.setItem(CONFIG.lastFileKey, filePath);
 
     } catch (error) {
-        console.error("System Error:", error);
+        console.error("Ralat Sistem:", error);
         const isFutureDay = error.message.includes('Belum Tersedia');
         contentDiv.innerHTML = `
             <div style="background-color: #fff3cd; border: 1px solid #ffecb5; padding: 25px; border-radius: 8px; color: #856404; text-align:center;">
                 <h3>${isFutureDay ? '📅' : '🛑'} ${error.message}</h3>
                 <p>${isFutureDay ? 'Fail ini akan dijana mengikut jadual pembangunan NEO OS.' : 'Sila pastikan fail wujud dalam repositori.'}</p>
-                <small>${filename}</small>
+                <small>${filePath}</small>
             </div>
         `;
     } finally {
@@ -105,106 +98,241 @@ async function loadMarkdownFile(filename) {
 }
 
 /**
- * Render kandungan ke skrin & kemas kini UI.
+ * Render HTML ke dalam kandungan utama.
  */
-function renderContent(filename, html) {
+function renderContent(filePath, html) {
     const contentDiv = document.getElementById('markdown-content');
     const pathEl = document.getElementById('breadcrumb-path');
     const titleEl = document.getElementById('journal-title');
 
     if (contentDiv) contentDiv.innerHTML = html;
     if (pathEl) {
-        pathEl.innerText = `NEO OS / ${filename.replace('.md', '').replace(/_/g, ' ')}`;
+        let cleanPath = filePath.replace('.md', '').replace(/_/g, ' ');
+        pathEl.textContent = `NEO OS / ${cleanPath}`;
     }
     if (titleEl) {
-        let cleanTitle = filename === CONFIG.initialFile 
-            ? "NEO OS: Dashboard Engineering" 
-            : filename.replace('.md', '');
-        titleEl.innerText = cleanTitle;
+        let cleanTitle = filePath.replace('.md', '');
+        titleEl.textContent = cleanTitle;
     }
-    document.title = `NEO OS | ${filename}`;
+    document.title = `NEO OS | ${filePath}`;
+
+    // Skrol ke atas kandungan
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ---------------------------
-//  Theme Management
-// ---------------------------
-function initTheme() {
-    const themeBtn = document.getElementById('theme-toggle');
-    if (!themeBtn) return;
+// =================== NAVIGASI & UI ===================
 
-    const savedTheme = localStorage.getItem(CONFIG.themeKey) || 'light';
-    applyTheme(savedTheme);
-
-    themeBtn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const newTheme = current === 'light' ? 'dark' : 'light';
-        applyTheme(newTheme);
-        localStorage.setItem(CONFIG.themeKey, newTheme);
-    });
+/**
+ * Menetapkan item navigasi yang aktif dan menutup sidebar pada mudah alih.
+ */
+function setActiveNav(element) {
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    if (element) {
+        element.classList.add('active');
+    }
+    // Tutup sidebar pada peranti mudah alih selepas navigasi
+    if (window.innerWidth <= 768) {
+        toggleSidebar();
+    }
 }
 
-function applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
+/**
+ * Menogol sidebar (untuk mudah alih).
+ */
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) sidebar.classList.toggle('open');
+    if (overlay) overlay.classList.toggle('open');
 }
 
+// =================== TEMA ===================
+
+/**
+ * Memuatkan tema yang disimpan, atau guna 'dark' sebagai lalai.
+ */
+function loadTheme() {
+    const savedTheme = localStorage.getItem(CONFIG.themeKey) || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+}
+
+/**
+ * Menukar tema antara gelap dan cerah.
+ */
+function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem(CONFIG.themeKey, newTheme);
+    updateThemeIcon(newTheme);
+}
+
+/**
+ * Mengemaskini ikon tema berdasarkan tema semasa.
+ */
 function updateThemeIcon(theme) {
     const icon = document.getElementById('theme-icon');
     if (icon) {
-        icon.setAttribute('data-lucide', theme === 'light' ? 'moon' : 'sun');
-        lucide.createIcons();
+        icon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+        if (window.lucide) lucide.createIcons();
     }
 }
 
-// ---------------------------
-//  Daily Log Sidebar
-// ---------------------------
+// =================== SIDEBAR: LOG HARIAN ===================
+
+/**
+ * Menjana senarai pautan log harian (day 1 - day N).
+ */
 function initDaysList() {
     const listContainer = document.getElementById('days-list');
     if (!listContainer) return;
 
-    // Kosongkan jika ada sebelumnya (elak duplikasi)
     listContainer.innerHTML = '';
-
     for (let i = 1; i <= CONFIG.totalPlannedDays; i++) {
         const dayFile = `daily_task_day${i}.md`;
         const link = document.createElement('a');
         link.href = '#';
-        link.className = 'day-link';
+        link.className = 'nav-item sub day-item';   // Tambah class 'day-item' untuk carian
         link.setAttribute('data-file', dayFile);
-        link.innerHTML = `<span>Day ${i}</span>`;
-        
-        // Tandakan fail yang mungkin belum wujud (tidak dapat dipastikan, tetapi kita biarkan)
+        link.innerHTML = `<i data-lucide="calendar"></i> Hari ${i}`;
+
         link.onclick = (e) => {
             e.preventDefault();
-            loadMarkdownFile(dayFile);
+            loadMarkdownFile(dayFile, link);
         };
 
         listContainer.appendChild(link);
     }
+    // Muat semula ikon Lucide untuk elemen yang baru dicipta
+    if (window.lucide) lucide.createIcons();
 }
 
+/**
+ * Menapis senarai hari berdasarkan input carian.
+ */
 function filterDays() {
-    const searchInput = document.getElementById('day-search');
-    if (!searchInput) return;
-    
-    const query = searchInput.value.toLowerCase();
-    const links = document.querySelectorAll('.day-link');
-    links.forEach(link => {
-        const text = link.innerText.toLowerCase();
-        link.style.display = text.includes(query) ? 'block' : 'none';
+    const searchTerm = document.getElementById('day-search')?.value.toLowerCase() || '';
+    const items = document.querySelectorAll('#days-list .day-item');
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(searchTerm) ? '' : 'none';
     });
 }
 
-// ---------------------------
-//  Clock Utility
-// ---------------------------
-function updateClock() {
-    const clockEl = document.getElementById('current-date');
-    if (clockEl) {
-        clockEl.innerText = new Date().toLocaleString('ms-MY', {
-            dateStyle: 'full',
-            timeStyle: 'medium'
+// =================== SIDEBAR: LAPORAN DEBUG ===================
+
+/**
+ * Menjana senarai pautan laporan debug mingguan.
+ */
+function generateDebugList() {
+    const debugList = document.getElementById('debug-list');
+    if (!debugList) return;
+
+    debugList.innerHTML = '';
+    for (let i = 1; i <= CONFIG.totalDebugWeeks; i++) {
+        const weekFile = `debug_week${i}.md`;
+        const link = document.createElement('a');
+        link.href = '#';
+        link.className = 'nav-item sub debug-item';
+        link.setAttribute('data-file', weekFile);
+        link.innerHTML = `<i data-lucide="bug"></i> Minggu ${i}`;
+
+        link.onclick = (e) => {
+            e.preventDefault();
+            loadMarkdownFile(weekFile, link);
+        };
+
+        debugList.appendChild(link);
+    }
+    if (window.lucide) lucide.createIcons();
+}
+
+// =================== CIRI ANTARAMUKA TAMBAHAN ===================
+
+/**
+ * Penunjuk kemajuan membaca (progress bar di bawah top bar).
+ */
+function initReadingProgress() {
+    const progressBar = document.getElementById('reading-progress');
+    if (!progressBar) return;
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercent = scrollHeight ? (scrollTop / scrollHeight) * 100 : 0;
+        progressBar.style.width = scrollPercent + '%';
+    });
+}
+
+/**
+ * Butang "Kembali ke Atas" yang muncul selepas skrol jauh.
+ */
+function initBackToTop() {
+    const btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+    });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// =================== INISIALISASI ===================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Muatkan tema
+    loadTheme();
+
+    // 2. Pasang event listener untuk butang tema
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleTheme);
+    }
+
+    // 3. Sidebar overlay & butang mudah alih
+    const overlay = document.getElementById('sidebar-overlay');
+    if (overlay) overlay.addEventListener('click', toggleSidebar);
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleSidebar);
+
+    // 4. Jana senarai navigasi
+    initDaysList();
+    generateDebugList();
+
+    // 5. Ciri antara muka
+    initReadingProgress();
+    initBackToTop();
+
+    // 6. Tarikh semasa (format ringkas)
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const now = new Date();
+        dateElement.textContent = now.toLocaleDateString('ms-MY', {
+            year: 'numeric', month: 'long', day: 'numeric'
         });
     }
-}
+
+    // 7. Pulihkan fail terakhir yang dibuka (jika ada)
+    const lastFile = sessionStorage.getItem(CONFIG.lastFileKey);
+    if (lastFile && lastFile !== 'isi_kandungan.md') {
+        // Cari elemen navigasi yang sepadan untuk menyerlahkan
+        const activeEl = document.querySelector(`[data-file="${lastFile}"]`);
+        loadMarkdownFile(lastFile, activeEl);
+    } else {
+        // Papar halaman utama (welcome screen) jika tiada fail terakhir
+        // atau fail terakhir adalah dashboard (isi_kandungan.md)
+        const welcomeScreen = document.querySelector('.welcome-screen');
+        if (welcomeScreen) welcomeScreen.style.display = 'flex';
+    }
+
+    // 8. Log pelancaran di konsol
+    console.log('%c🚀 NEO OS Journal v4.0.0 %cDimulakan',
+        'background:#0a0a1a;color:#00e5ff;padding:8px 12px;border-radius:4px 0 0 4px;font-weight:bold;',
+        'background:#1a1a2e;color:#fff;padding:8px 12px;border-radius:0 4px 4px 0;');
+});
