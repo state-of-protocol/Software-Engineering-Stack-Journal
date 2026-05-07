@@ -1,0 +1,186 @@
+/* NEO OS - Professional Stylesheet */
+
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #007bff;
+    --bg-color: #f0f2f5;
+    --text-color: #1c1e21;
+    --container-bg: #ffffff;
+    --code-bg: #282c34;
+    --code-text: #abb2bf;
+    --border-color: #dee2e6;
+    --header-height: 70px;
+}
+
+/* 1. Global Reset & Body */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* 2. Layout Elements */
+.header-bar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-bar h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.container {
+    max-width: 950px;
+    margin: 30px auto;
+    background-color: var(--container-bg);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.footer {
+    text-align: center;
+    padding: 30px;
+    color: #65676b;
+    font-size: 0.85rem;
+}
+
+/* 3. Navigation */
+.nav-quick {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-quick a {
+    margin: 0 12px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.nav-quick a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* 4. Markdown Specific Styles */
+#markdown-content h1 {
+    color: var(--primary-color);
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+#markdown-content h2 {
+    color: var(--secondary-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-top: 35px;
+}
+
+#markdown-content h3 {
+    color: #17a2b8;
+    margin-top: 25px;
+}
+
+#markdown-content p {
+    margin-bottom: 1.2rem;
+}
+
+/* 5. Code & Syntax Highlighting */
+#markdown-content pre {
+    background-color: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 20px 0;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+#markdown-content code {
+    font-family: 'Consolas', monospace;
+    background-color: #f1f3f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #d63384; /* Pinkish-red for inline code */
+}
+
+/* 6. Blockquotes */
+#markdown-content blockquote {
+    border-left: 5px solid var(--primary-color);
+    padding: 10px 25px;
+    background-color: #f8f9fa;
+    color: #495057;
+    font-style: italic;
+    margin: 25px 0;
+}
+
+/* 7. Tables */
+#markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+}
+
+#markdown-content table th, 
+#markdown-content table td {
+    border: 1px solid var(--border-color);
+    padding: 14px;
+    text-align: left;
+}
+
+#markdown-content table th {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+#markdown-content table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+/* 8. Lists */
+#markdown-content ul, 
+#markdown-content ol {
+    margin-bottom: 20px;
+    padding-left: 30px;
+}
+
+/* 9. Images */
+#markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 20px auto;
+}
+
+/* 10. Responsive Adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 20px;
+    }
+    
+    .nav-quick a {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+}
