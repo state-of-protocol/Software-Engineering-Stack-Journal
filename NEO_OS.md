@@ -1,4 +1,4 @@
-# NEO_OS_planning_with_3_course_of_professional_software_engineering_development
+# NEO OS Professional Software Development 
 Exported on: 07/05/2026, 16:58:11
 
 ---
