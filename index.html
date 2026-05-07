@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="ms" data-theme="light">
+<html lang="ms" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NEO OS Engineering Stack Journal - Jurnal Kejuruteraan Sistem Operasi.">
-    <title>NEO OS | Engineering Stack Journal</title>
+    <meta name="description" content="NEO OS - Ekosistem Digital 10 Tunggak: Komuniti, Aplikasi, Identiti, Dokumentasi, Aset, Pembayaran, Pendidikan, Budaya, Mobiliti & Gaya Hidup.">
+    <title>NEO OS | Ekosistem Digital 10 Tunggak</title>
 
-    <!-- Library Luaran -->
+    <!-- Prerender untuk prestasi -->
+    <link rel="prerender" href="https://state-of-protocol.github.io/Software-Engineering-Stack-Journal/">
+
+    <!-- Pustaka Luaran -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
@@ -18,53 +21,119 @@
     <!-- ========== SIDEBAR NAVIGASI ========== -->
     <nav class="sidebar" aria-label="Navigasi Utama">
         <div class="sidebar-header">
-            <div class="logo">NEO<span>OS</span></div>
-            <button id="theme-toggle" class="theme-btn" aria-label="Tukar tema gelap/cerah">
-                <i data-lucide="moon" id="theme-icon"></i>
-            </button>
-        </div>
-
-        <!-- --- Dokumen Teras --- -->
-        <div class="nav-group">
-            <p class="nav-label">Dokumen Teras</p>
-            <a href="#" class="nav-item" data-file="isi_kandungan.md" onclick="loadMarkdownFile('isi_kandungan.md')">
-                <i data-lucide="list"></i> Isi Kandungan
-            </a>
-            <a href="#" class="nav-item" data-file="manifesto_awal.md" onclick="loadMarkdownFile('manifesto_awal.md')">
-                <i data-lucide="file-text"></i> Manifesto
-            </a>
-            <a href="#" class="nav-item" data-file="architecture.md" onclick="loadMarkdownFile('architecture.md')">
-                <i data-lucide="cpu"></i> Seni Bina
-            </a>
-        </div>
-
-        <!-- --- Log Harian --- -->
-        <div class="nav-group">
-            <p class="nav-label">Log Harian</p>
-            <div class="search-box">
-                <input type="text" id="day-search" placeholder="Cari Hari (cth: 1)..." aria-label="Cari log harian" oninput="filterDays()">
+            <div class="logo" onclick="location.reload()" title="Klik untuk segar semula ke Utama">
+                <span class="logo-icon"><i data-lucide="hexagon"></i></span>
+                NEO<span>OS</span>
             </div>
-            <div id="days-list" class="days-list" aria-label="Senarai hari pembangunan"></div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="theme-btn" aria-label="Tukar tema" title="Tukar tema gelap/cerah">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <button id="sidebar-toggle" class="theme-btn mobile-only" aria-label="Togol sidebar" title="Togol sidebar">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- --- Arkib --- -->
-        <div class="nav-group">
-            <p class="nav-label">Arkib Perbincangan</p>
-            <a href="#" class="nav-item" data-file="NEO_OS.md" onclick="loadMarkdownFile('NEO_OS.md')">
-                <i data-lucide="archive"></i> Transkrip Awal (2026-05-07)
-            </a>
+        <div class="nav-scroll">
+            <!-- --- Dokumen Teras --- -->
+            <div class="nav-group">
+                <p class="nav-label">📜 Dokumen Teras</p>
+                <a href="#" class="nav-item active" data-file="isi_kandungan.md" onclick="loadMarkdownFile('isi_kandungan.md', this)" aria-current="page">
+                    <i data-lucide="list"></i> Isi Kandungan
+                </a>
+                <a href="#" class="nav-item" data-file="manifesto_awal.md" onclick="loadMarkdownFile('manifesto_awal.md', this)">
+                    <i data-lucide="file-text"></i> Manifesto
+                </a>
+                <a href="#" class="nav-item" data-file="architecture.md" onclick="loadMarkdownFile('architecture.md', this)">
+                    <i data-lucide="cpu"></i> Seni Bina
+                </a>
+            </div>
+
+            <!-- --- Ekosistem 10 Tunggak --- -->
+            <div class="nav-group">
+                <p class="nav-label">🌐 Ekosistem 10 Tunggak</p>
+                <a href="#" class="nav-item sub" data-file="tunggak/01_neo_circle.md" onclick="loadMarkdownFile('tunggak/01_neo_circle.md', this)">
+                    <i data-lucide="message-circle"></i> 1. NEO Circle
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/02_neo_hub.md" onclick="loadMarkdownFile('tunggak/02_neo_hub.md', this)">
+                    <i data-lucide="shopping-bag"></i> 2. NEO Hub
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/03_neo_id.md" onclick="loadMarkdownFile('tunggak/03_neo_id.md', this)">
+                    <i data-lucide="fingerprint"></i> 3. NEO ID
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/04_neo_docs.md" onclick="loadMarkdownFile('tunggak/04_neo_docs.md', this)">
+                    <i data-lucide="book-open"></i> 4. NEO Docs
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/05_neo_arts.md" onclick="loadMarkdownFile('tunggak/05_neo_arts.md', this)">
+                    <i data-lucide="palette"></i> 5. NEO Arts
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/06_neo_pay.md" onclick="loadMarkdownFile('tunggak/06_neo_pay.md', this)">
+                    <i data-lucide="credit-card"></i> 6. NEO Pay
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/07_neo_erc.md" onclick="loadMarkdownFile('tunggak/07_neo_erc.md', this)">
+                    <i data-lucide="graduation-cap"></i> 7. NEO ERC
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/08_neo_culture.md" onclick="loadMarkdownFile('tunggak/08_neo_culture.md', this)">
+                    <i data-lucide="heart"></i> 8. NEO Culture
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/09_neo_cycle.md" onclick="loadMarkdownFile('tunggak/09_neo_cycle.md', this)">
+                    <i data-lucide="bike"></i> 9. NEO Cycle
+                </a>
+                <a href="#" class="nav-item sub" data-file="tunggak/10_neo_urban.md" onclick="loadMarkdownFile('tunggak/10_neo_urban.md', this)">
+                    <i data-lucide="building-2"></i> 10. NEO Urban Living
+                </a>
+            </div>
+
+            <!-- --- Log Harian --- -->
+            <div class="nav-group">
+                <p class="nav-label">📅 Log Harian</p>
+                <div class="search-box">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="day-search" placeholder="Cari hari..." aria-label="Cari log harian" oninput="filterDays()">
+                </div>
+                <div id="days-list" class="days-list" aria-label="Senarai hari pembangunan"></div>
+            </div>
+
+            <!-- --- Laporan Debug --- -->
+            <div class="nav-group">
+                <p class="nav-label">🐞 Laporan Debug</p>
+                <div id="debug-list" class="days-list" aria-label="Senarai laporan debug mingguan"></div>
+            </div>
+
+            <!-- --- Arkib --- -->
+            <div class="nav-group">
+                <p class="nav-label">🗄️ Arkib Perbincangan</p>
+                <a href="#" class="nav-item" data-file="NEO_OS.md" onclick="loadMarkdownFile('NEO_OS.md', this)">
+                    <i data-lucide="archive"></i> Transkrip Awal (2026-05-07)
+                </a>
+                <a href="#" class="nav-item" data-file="SKILL.md" onclick="loadMarkdownFile('SKILL.md', this)" title="Panduan Membina Forum Pelbagai Gaya dengan GitHub Pages">
+                    <i data-lucide="code-2"></i> SKILL.md - Panduan Forum
+                </a>
+            </div>
         </div>
 
         <div class="sidebar-footer">
-            <p>Versi 3.0.0</p>
+            <div class="footer-stats">
+                <span class="stat-item"><strong>Versi 4.0.0</strong></span>
+                <span class="stat-divider">|</span>
+                <span class="stat-item"><span class="status-dot"></span> Fasa 1: Boot</span>
+            </div>
             <p>Falsafah Zero-Ralat</p>
         </div>
     </nav>
 
+    <!-- ========== OVERLAY SIDEBAR (MOBILE) ========== -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- ========== KANDUNGAN UTAMA ========== -->
     <main class="main-content">
         <header class="top-bar">
+            <button id="mobile-menu-btn" class="theme-btn mobile-only" onclick="toggleSidebar()" aria-label="Buka menu">
+                <i data-lucide="menu"></i>
+            </button>
             <div class="breadcrumb">
+                <i data-lucide="home" class="breadcrumb-icon"></i>
                 <span id="breadcrumb-path">NEO OS / Home</span>
             </div>
             <div class="journal-meta">
@@ -75,21 +144,62 @@
         </header>
 
         <div class="content-wrapper">
+            <!-- Penunjuk Kemajuan Membaca -->
+            <div class="progress-container">
+                <div class="progress-bar" id="reading-progress"></div>
+            </div>
             <article id="markdown-content" class="markdown-body">
-                <div class="loader">
-                    <p>Memuatkan Sistem...</p>
-                    <p><small>Sila tunggu sebentar</small></p>
+                <div class="welcome-screen">
+                    <div class="welcome-logo">
+                        <i data-lucide="hexagon" style="width:64px;height:64px;color:var(--accent-primary);animation: float 3s ease-in-out infinite;"></i>
+                    </div>
+                    <h1>Selamat Datang ke <span class="highlight">NEO OS</span></h1>
+                    <p class="welcome-subtitle">Ekosistem Digital 10 Tunggak — Platform Kedaulatan Digital</p>
+                    <div class="welcome-stats">
+                        <div class="stat-card">
+                            <span class="stat-number">10</span>
+                            <span class="stat-label">Tunggak Ekosistem</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">2.5</span>
+                            <span class="stat-label">Tahun Pembangunan</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Bahasa Utama</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">Visi</span>
+                        </div>
+                    </div>
+                    <div class="welcome-cta">
+                        <button class="cta-btn primary" onclick="loadMarkdownFile('manifesto_awal.md', document.querySelector('[data-file=\'manifesto_awal.md\']'))">
+                            <i data-lucide="file-text"></i> Baca Manifesto
+                        </button>
+                        <button class="cta-btn secondary" onclick="loadMarkdownFile('isi_kandungan.md', document.querySelector('[data-file=\'isi_kandungan.md\']'))">
+                            <i data-lucide="list"></i> Isi Kandungan
+                        </button>
+                    </div>
                 </div>
             </article>
         </div>
     </main>
 
+    <!-- ========== TOMBOL "KEMBALI KE ATAS" ========== -->
+    <button id="back-to-top" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Kembali ke atas" title="Kembali ke atas">
+        <i data-lucide="chevron-up"></i>
+    </button>
+
     <!-- ========== JAVASCRIPT ========== -->
     <script src="script.js" defer></script>
     <script>
-        // Ikon Lucide dimuatkan selepas semua elemen sedia
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            // Muatkan senarai hari debug
+            if (typeof generateDebugList === 'function') {
+                generateDebugList();
+            }
         });
     </script>
 
