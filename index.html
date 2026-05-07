@@ -4,17 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEO OS | Engineering Stack Journal</title>
-    
-    <!-- Library: Marked.js untuk render Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Library: Lucide Icons untuk ikon profesional -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Side Navigation -->
     <nav class="sidebar">
         <div class="sidebar-header">
             <div class="logo">NEO<span>OS</span></div>
@@ -44,9 +39,7 @@
             <div class="search-box">
                 <input type="text" id="day-search" placeholder="Cari Hari (cth: 1)..." oninput="filterDays()">
             </div>
-            <div id="days-list" class="days-list">
-                <!-- Fail daily_task_dayN.md akan dijana secara automatik di sini -->
-            </div>
+            <div id="days-list" class="days-list"></div>
         </div>
 
         <div class="sidebar-footer">
@@ -55,7 +48,6 @@
         </div>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="main-content">
         <header class="top-bar">
             <div class="breadcrumb">
@@ -68,16 +60,12 @@
 
         <div class="content-wrapper">
             <div id="markdown-content" class="markdown-body">
-                <!-- Content loads here -->
                 <div class="loader">Memuatkan Sistem...</div>
             </div>
         </div>
     </main>
 
     <script src="script.js"></script>
-    <script>
-        // Inisialisasi ikon Lucide
-        lucide.createIcons();
-    </script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
