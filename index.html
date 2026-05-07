@@ -3,69 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NEO OS Engineering Stack Journal - Jurnal Kejuruteraan Sistem Operasi.">
     <title>NEO OS | Engineering Stack Journal</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Library Luaran -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
+    <!-- Stail Utama -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="sidebar">
+    <!-- ========== SIDEBAR NAVIGASI ========== -->
+    <nav class="sidebar" aria-label="Navigasi Utama">
         <div class="sidebar-header">
             <div class="logo">NEO<span>OS</span></div>
-            <button id="theme-toggle" class="theme-btn">
+            <button id="theme-toggle" class="theme-btn" aria-label="Tukar tema gelap/cerah">
                 <i data-lucide="moon" id="theme-icon"></i>
             </button>
         </div>
 
+        <!-- --- Dokumen Teras --- -->
         <div class="nav-group">
-            <p class="nav-label">Core Documents</p>
-            <a href="#" class="nav-item active" onclick="loadMarkdownFile('NEO_OS.md')">
-                <i data-lucide="book-open"></i> Visi Strategik
-            </a>
-            <a href="#" class="nav-item" onclick="loadMarkdownFile('isi_kandungan.md')">
+            <p class="nav-label">Dokumen Teras</p>
+            <a href="#" class="nav-item" data-file="isi_kandungan.md" onclick="loadMarkdownFile('isi_kandungan.md')">
                 <i data-lucide="list"></i> Isi Kandungan
             </a>
-            <a href="#" class="nav-item" onclick="loadMarkdownFile('manifesto_awal.md')">
+            <a href="#" class="nav-item" data-file="manifesto_awal.md" onclick="loadMarkdownFile('manifesto_awal.md')">
                 <i data-lucide="file-text"></i> Manifesto
             </a>
-            <a href="#" class="nav-item" onclick="loadMarkdownFile('architecture.md')">
+            <a href="#" class="nav-item" data-file="architecture.md" onclick="loadMarkdownFile('architecture.md')">
                 <i data-lucide="cpu"></i> Seni Bina
             </a>
         </div>
 
+        <!-- --- Log Harian --- -->
         <div class="nav-group">
-            <p class="nav-label">Daily Logs</p>
+            <p class="nav-label">Log Harian</p>
             <div class="search-box">
-                <input type="text" id="day-search" placeholder="Cari Hari (cth: 1)..." oninput="filterDays()">
+                <input type="text" id="day-search" placeholder="Cari Hari (cth: 1)..." aria-label="Cari log harian" oninput="filterDays()">
             </div>
-            <div id="days-list" class="days-list"></div>
+            <div id="days-list" class="days-list" aria-label="Senarai hari pembangunan"></div>
+        </div>
+
+        <!-- --- Arkib --- -->
+        <div class="nav-group">
+            <p class="nav-label">Arkib Perbincangan</p>
+            <a href="#" class="nav-item" data-file="NEO_OS.md" onclick="loadMarkdownFile('NEO_OS.md')">
+                <i data-lucide="archive"></i> Transkrip Awal (2026-05-07)
+            </a>
         </div>
 
         <div class="sidebar-footer">
-            <p>Version 1.0.0</p>
-            <p>Zero-Error Philosophy</p>
+            <p>Versi 3.0.0</p>
+            <p>Falsafah Zero-Ralat</p>
         </div>
     </nav>
 
+    <!-- ========== KANDUNGAN UTAMA ========== -->
     <main class="main-content">
         <header class="top-bar">
             <div class="breadcrumb">
                 <span id="breadcrumb-path">NEO OS / Home</span>
             </div>
-            <div class="user-profile">
+            <div class="journal-meta">
+                <span id="journal-title">Dashboard Kejuruteraan</span>
+                <span class="separator">|</span>
                 <span id="current-date"></span>
             </div>
         </header>
 
         <div class="content-wrapper">
-            <div id="markdown-content" class="markdown-body">
-                <div class="loader">Memuatkan Sistem...</div>
-            </div>
+            <article id="markdown-content" class="markdown-body">
+                <div class="loader">
+                    <p>Memuatkan Sistem...</p>
+                    <p><small>Sila tunggu sebentar</small></p>
+                </div>
+            </article>
         </div>
     </main>
 
-    <script src="script.js"></script>
-    <script>lucide.createIcons();</script>
+    <!-- ========== JAVASCRIPT ========== -->
+    <script src="script.js" defer></script>
+    <script>
+        // Ikon Lucide dimuatkan selepas semua elemen sedia
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+
+    <!-- ========== FALLBACK TANPA JAVASCRIPT ========== -->
+    <noscript>
+        <div style="background:#fff3cd;border:1px solid #ffecb5;padding:20px;margin:20px;border-radius:8px;text-align:center;font-family:sans-serif;">
+            <h2>⚠️ JavaScript Diperlukan</h2>
+            <p>Sila aktifkan JavaScript untuk pengalaman penuh Jurnal NEO OS.</p>
+            <p>Anda masih boleh membaca fail Markdown secara langsung di <a href="https://github.com/state-of-protocol/Software-Engineering-Stack-Journal">repositori GitHub</a>.</p>
+        </div>
+    </noscript>
+
 </body>
 </html>
