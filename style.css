@@ -1,186 +1,209 @@
-/* NEO OS - Professional Stylesheet */
-
 :root {
-    --primary-color: #0056b3;
-    --secondary-color: #007bff;
-    --bg-color: #f0f2f5;
-    --text-color: #1c1e21;
-    --container-bg: #ffffff;
-    --code-bg: #282c34;
-    --code-text: #abb2bf;
-    --border-color: #dee2e6;
-    --header-height: 70px;
+    /* Light Mode Palette */
+    --bg-body: #f8f9fa;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #6c757d;
+    --primary: #0056b3;
+    --secondary: #00a8ff;
+    --accent: #eef2ff;
+    --border: #e0e0e0;
+    --code-bg: #f1f3f5;
+    --code-text: #d63384;
+    --shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-/* 1. Global Reset & Body */
+[data-theme="dark"] {
+    --bg-body: #0f172a;
+    --bg-sidebar: #1e293b;
+    --bg-card: #1e293b;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --primary: #38bdf8;
+    --secondary: #818cf8;
+    --accent: #334155;
+    --border: #334155;
+    --code-bg: #0f172a;
+    --code-text: #f472b6;
+    --shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+* { box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
-    padding: 0;
-    line-height: 1.6;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    display: flex;
+    height: 100vh;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    overflow: hidden;
 }
 
-/* 2. Layout Elements */
-.header-bar {
-    background-color: var(--primary-color);
-    color: white;
+/* Sidebar Navigation */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+.logo span { color: var(--text-main); }
+
+.theme-btn {
+    background: none;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--text-main);
+}
+
+.nav-group {
+    padding: 0 15px;
+    margin-bottom: 25px;
+}
+
+.nav-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: var(--text-main);
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+    gap: 12px;
+    transition: 0.2s;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: var(--accent);
+    color: var(--primary);
+}
+
+/* Day Search & List */
+.search-box {
+    padding: 0 10px 10px;
+}
+.search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-body);
+    color: var(--text-main);
+}
+
+.days-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.day-link {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+
+.day-link:hover {
+    background: var(--accent);
+    color: var(--primary);
+}
+
+.sidebar-footer {
+    margin-top: auto;
     padding: 20px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    border-top: 1px solid var(--border);
 }
 
-.header-bar h1 {
-    margin: 0;
-    font-size: 1.8rem;
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.container {
-    max-width: 950px;
-    margin: 30px auto;
-    background-color: var(--container-bg);
+.top-bar {
+    height: 60px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 20px;
+}
+
+.markdown-body {
+    max-width: 850px;
+    margin: 0 auto;
+    background: var(--bg-card);
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow);
 }
 
-.footer {
-    text-align: center;
-    padding: 30px;
-    color: #65676b;
-    font-size: 0.85rem;
-}
-
-/* 3. Navigation */
-.nav-quick {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.nav-quick a {
-    margin: 0 12px;
-    text-decoration: none;
-    color: var(--primary-color);
-    font-weight: bold;
-    font-size: 0.95rem;
-    transition: color 0.3s ease;
-}
-
-.nav-quick a:hover {
-    color: var(--secondary-color);
-    text-decoration: underline;
-}
-
-/* 4. Markdown Specific Styles */
-#markdown-content h1 {
-    color: var(--primary-color);
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-}
-
-#markdown-content h2 {
-    color: var(--secondary-color);
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
-    margin-top: 35px;
-}
-
-#markdown-content h3 {
-    color: #17a2b8;
-    margin-top: 25px;
-}
-
-#markdown-content p {
-    margin-bottom: 1.2rem;
-}
-
-/* 5. Code & Syntax Highlighting */
-#markdown-content pre {
-    background-color: var(--code-bg);
-    color: var(--code-text);
-    padding: 20px;
-    border-radius: 8px;
+/* Markdown Styling */
+.markdown-body h1 { color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+.markdown-body h2 { color: var(--secondary); margin-top: 30px; }
+.markdown-body pre { 
+    background: var(--code-bg); 
+    color: var(--code-text); 
+    padding: 15px; 
+    border-radius: 8px; 
     overflow-x: auto;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 20px 0;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
+.markdown-body code { background: var(--code-bg); color: var(--code-text); padding: 2px 5px; border-radius: 4px; }
+.markdown-body blockquote { border-left: 4px solid var(--primary); padding: 10px 20px; background: var(--accent); font-style: italic; }
+.markdown-body table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.markdown-body th, .markdown-body td { border: 1px solid var(--border); padding: 12px; text-align: left; }
+.markdown-body th { background: var(--accent); }
 
-#markdown-content code {
-    font-family: 'Consolas', monospace;
-    background-color: #f1f3f5;
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: #d63384; /* Pinkish-red for inline code */
-}
-
-/* 6. Blockquotes */
-#markdown-content blockquote {
-    border-left: 5px solid var(--primary-color);
-    padding: 10px 25px;
-    background-color: #f8f9fa;
-    color: #495057;
-    font-style: italic;
-    margin: 25px 0;
-}
-
-/* 7. Tables */
-#markdown-content table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 25px 0;
-}
-
-#markdown-content table th, 
-#markdown-content table td {
-    border: 1px solid var(--border-color);
-    padding: 14px;
-    text-align: left;
-}
-
-#markdown-content table th {
-    background-color: #f8f9fa;
-    color: var(--primary-color);
-    font-weight: bold;
-}
-
-#markdown-content table tr:nth-child(even) {
-    background-color: #fafafa;
-}
-
-/* 8. Lists */
-#markdown-content ul, 
-#markdown-content ol {
-    margin-bottom: 20px;
-    padding-left: 30px;
-}
-
-/* 9. Images */
-#markdown-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    display: block;
-    margin: 20px auto;
-}
-
-/* 10. Responsive Adjustments */
-@media (max-width: 768px) {
-    .container {
-        margin: 10px;
-        padding: 20px;
-    }
-    
-    .nav-quick a {
-        display: inline-block;
-        margin-bottom: 10px;
-    }
-}
+.loader { text-align: center; padding: 50px; color: var(--text-muted); }
