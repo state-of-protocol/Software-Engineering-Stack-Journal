@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal NEO OS - Hari [N]</title>
+    <!-- Muat pustaka Marked.js dari CDN untuk render Markdown ke HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* CSS asas untuk membuat paparan lebih mudah dibaca, tanpa fail asing */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #007bff;
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #00a0e0;
+            margin-top: 25px;
+        }
+        h4 {
+            color: #555;
+            margin-top: 20px;
+        }
+        pre {
+            background-color: #eef;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: #eef;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        blockquote {
+            border-left: 4px solid #ccc;
+            padding-left: 15px;
+            color: #666;
+            margin: 20px 0;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tajuk jurnal akan dimuatkan di sini atau boleh ditukar secara dinamik -->
+        <h1 id="journal-title">Jurnal Peribadi NEO OS</h1>
+        <div id="markdown-content">
+            <!-- Kandungan dari fail Markdown akan dipaparkan di sini -->
+            Memuatkan kandungan jurnal...
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengambil fail Markdown dan memaparkannya
+        async function loadMarkdownFile(filename) {
+            try {
+                const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`Gagal memuatkan fail: ${response.statusText}`);
+                }
+                const markdownText = await response.text();
+                // Menggunakan Marked.js untuk menukar Markdown ke HTML
+                document.getElementById('markdown-content').innerHTML = marked.parse(markdownText);
+
+                // Cuba ekstrak tajuk hari dari fail dan kemas kini tajuk HTML
+                const firstLine = markdownText.split('\n')[0];
+                if (firstLine.startsWith('# Tarikh:')) {
+                    const dateMatch = firstLine.match(/Tarikh: (.+)/);
+                    if (dateMatch && dateMatch[1]) {
+                        document.title = `Jurnal NEO OS - ${dateMatch[1]}`;
+                        document.getElementById('journal-title').innerText = `Jurnal NEO OS - ${dateMatch[1]}`;
+                    }
+                } else {
+                     document.title = `Jurnal NEO OS - ${filename}`;
+                     document.getElementById('journal-title').innerText = `Jurnal Peribadi NEO OS (${filename})`;
+                }
+
+            } catch (error) {
+                console.error("Ralat memuatkan fail Markdown:", error);
+                document.getElementById('markdown-content').innerHTML = `
+                    <p style="color: red;">Ralat: Tidak dapat memuatkan jurnal.</p>
+                    <p>Sila pastikan fail <code>${filename}</code> wujud dalam direktori yang sama.</p>
+                    <p>Anda boleh mengubah nama fail dalam kod JavaScript di bawah.</p>
+                `;
+            }
+        }
+
+        // Tentukan nama fail Markdown yang ingin dimuatkan
+        // Anda boleh ubah 'daily_task_day1.md' kepada nama fail yang lain
+        const markdownFilename = 'daily_task_day1.md'; 
+        loadMarkdownFile(markdownFilename);
+    </script>
+</body>
+</html>
