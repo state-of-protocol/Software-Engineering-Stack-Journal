@@ -7,7 +7,7 @@
     <!-- Muat pustaka Marked.js dari CDN untuk render Markdown ke HTML -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        /* CSS Lengkap & Kemas (Tanpa fail asing) */
+        /* CSS Lengkap & Kemas */
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -87,12 +87,6 @@
             margin: 20px 0;
         }
 
-        #markdown-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
         #markdown-content table {
             width: 100%;
             border-collapse: collapse;
@@ -115,6 +109,22 @@
             color: #65676b;
             font-size: 0.85rem;
         }
+
+        /* Navigasi Ringkas */
+        .nav-quick {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .nav-quick a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #0056b3;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .nav-quick a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +134,14 @@
     </div>
 
     <div class="container">
+        <!-- Tambahan Navigasi untuk memudahkan anda berpindah fail -->
+        <div class="nav-quick">
+            <a href="#" onclick="loadMarkdownFile('NEO_OS.md')">Visi</a> | 
+            <a href="#" onclick="loadMarkdownFile('isi_kandungan.md')">Isi Kandungan</a> | 
+            <a href="#" onclick="loadMarkdownFile('daily_task_day1.md')">Log Day 1</a> |
+            <a href="#" onclick="loadMarkdownFile('architecture.md')">Seni Bina</a>
+        </div>
+
         <div id="markdown-content">
             <p>Sila tunggu sebentar, sistem sedang memuatkan data kernel...</p>
         </div>
@@ -141,45 +159,42 @@
             const contentDiv = document.getElementById('markdown-content');
             const titleEl = document.getElementById('journal-title');
 
+            // Skrol ke atas setiap kali tukar fail
+            window.scrollTo(0, 0);
+
             try {
-                // Fetch sumber fail .md
-                const response = await fetch(filename);
+                // Fetch sumber fail .md (tambah cache breaker untuk elak data lama)
+                const response = await fetch(filename + '?v=' + new Date().getTime());
                 
                 if (!response.ok) {
-                    throw new Error(`Kernel Error: Gagal memuatkan fail [${filename}] - ${response.statusText}`);
+                    throw new Error(`Kernel Error: Gagal memuatkan fail [${filename}]`);
                 }
 
                 const markdownText = await response.text();
-
-                // Menggunakan Marked.js untuk menukarkan Markdown ke HTML
                 contentDiv.innerHTML = marked.parse(markdownText);
 
-                // Kemaskini Tajuk Halaman secara dinamik
-                // 1. Cuba cari header # di baris pertama fail
-                const firstLine = markdownText.split('\n')[0];
-                if (firstLine.startsWith('# ')) {
-                    const cleanTitle = firstLine.replace('# ', '').trim();
-                    titleEl.innerText = cleanTitle;
-                    document.title = `NEO OS - ${cleanTitle}`;
-                } else if (filename.includes('daily_task')) {
-                    // Logik khusus untuk log harian
+                // Update UI title
+                if (filename.includes('daily_task')) {
                     titleEl.innerText = `NEO OS Log: ${filename}`;
-                    document.title = `NEO OS Log: ${filename}`;
+                } else if (filename === 'NEO_OS.md') {
+                    titleEl.innerText = "NEO OS: Strategic Planning";
                 } else {
-                    // Nama lalai mengikut fail
-                    titleEl.innerText = `Dokumen: ${filename}`;
-                    document.title = `NEO OS - ${filename}`;
+                    titleEl.innerText = filename.replace('.md', '').toUpperCase();
                 }
+
+                document.title = titleEl.innerText;
 
             } catch (error) {
                 console.error("OS System Error:", error);
                 contentDiv.innerHTML = `
                     <div style="background-color: #fff0f0; border: 1px solid #ffcccb; padding: 20px; border-radius: 8px;">
                         <h3 style="color: #d9534f; margin-top: 0;">🛑 Ralat Pemuatan Sistem</h3>
-                        <p>Tidak dapat memaparkan fail: <strong>${filename}</strong></p>
-                        <p>Sila pastikan fail .md wujud dalam direktori yang sama dengan fail index.html ini.</p>
-                        <hr>
-                        <p style="font-size: 0.8rem; color: #666;">Kod Ralat: ${error.message}</p>
+                        <p>Fail tidak dijumpai: <strong>${filename}</strong></p>
+                        <p>Penyelesaian:</p>
+                        <ul>
+                            <li>Pastikan nama fail dalam GitHub adalah 100% tepat (sensitif huruf besar/kecil).</li>
+                            <li>Pastikan anda telah melakukan 'Commit' dan 'Push' fail tersebut.</li>
+                        </ul>
                     </div>
                 `;
             }
@@ -187,11 +202,10 @@
 
         /**
          * KONFIGURASI FAIL PERMULAAN
-         * Ubah nilai di bawah mengikut fail yang anda ingin jadikan halaman utama (landing page).
+         * Saya ubah kepada 'NEO_OS.md' mengikut struktur fail terkini anda.
          */
-        const INITIAL_FILE = 'NEO_OS_planning_with_3_course_of_professional_software_engineering_development.md'; 
+        const INITIAL_FILE = 'NEO_OS.md'; 
         
-        // Jalankan fungsi
         loadMarkdownFile(INITIAL_FILE);
     </script>
 </body>
